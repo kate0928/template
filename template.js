@@ -130,6 +130,7 @@
   var elementQuerySelectorAll = Element.prototype.querySelectorAll;
   var docQuerySelectorAll = Document.prototype.querySelectorAll;
   var fragQuerySelectorAll = DocumentFragment.prototype.querySelectorAll;
+  var capturedInnerHTML = Object.ownPropertyValue(Element.prototype, 'innerHTML');
 
   var scriptSelector = 'script:not([type]),script[type="application/javascript"],script[type="text/javascript"]';
 
@@ -294,6 +295,20 @@
       }
       return el;
     };
+
+    // Patch Element innerHTML to bootstrap newly written templates
+    if (canDecorate) {
+      Object.defineProperty(Element.prototype, 'innerHTML', {
+        get: function() {
+          return getInnerHTML(this);
+        },
+        set: function(text) {
+          capturedInnerHTML.set.call(this, text);
+          PolyfilledHTMLTemplateElement.bootstrap(this);
+        },
+        configurable: true
+      });
+    }
 
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-end.html#escapingString
     var escapeAttrRegExp = /[&\u00A0"]/g;

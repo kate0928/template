@@ -368,6 +368,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           assert.equal(svgTemplate.namespaceURI, svgNamespace);
           assert.equal(svgTemplate.firstChild.namespaceURI, svgNamespace);
         });
+
+        test('innerHTML of other nodes bootstrap template', function() {
+          var div = document.createElement('div');
+          div.innerHTML = '<template><x-foo></x-foo></template>';
+          var template = div.firstElementChild;
+          assert.equal(div.querySelector('x-foo'), null);
+          assert.isDefined(template.content);
+        });
       });
     </script>
   </body>

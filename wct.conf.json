@@ -7,7 +7,12 @@
     "local": {
       "browserOptions": {
         "chrome": [
-          "no-sandbox"
+          "no-sandbox",
+          "headless",
+          "disable-gpu"
+        ],
+        "firefox": [
+          "-headless"
         ]
       }
     }
